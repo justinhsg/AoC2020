@@ -26,17 +26,17 @@ def validate(key, value):
         return True
 
 for entry in data:
-    fields = re.split("\n| |:", entry)
+    fields = re.split("\n| ", entry)
     headers = set()
     info = dict()
-    for i in range(len(fields)//2):
-        headers.add(fields[i*2])
+    valid = True
+    for field in fields:
+        [key, val] = field.split(":")
+        headers.add(key)
+        valid = valid & validate(key, val)
     diff_set = req_fields - headers
     if(len(diff_set) == 0 or (len(diff_set)==1 and 'cid' in diff_set)):
         part1 += 1
-        valid = True
-        for i in range(len(fields)//2):
-            valid = valid & validate(fields[i*2], fields[i*2+1])
         if(valid):
             part2 += 1
 print(part1)

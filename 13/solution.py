@@ -1,41 +1,38 @@
 import sys
 import os
-import re
-from collections import deque
 
 with open(os.path.join(sys.path[0], 'input' if len(sys.argv)==1 else 'sample'), "r") as infile:
     lines = infile.read().split("\n")
 
 depart = int(lines[0])
-nos = []
-offset = []
+
+ids = []
+delays  = []
 for i, nums in enumerate(lines[1].split(",")):
     if(nums != 'x'):
-        nos.append(int(nums))
-        offset.append(i)
+        ids.append(int(nums))
+        delays.append(i)
 
 best = 1e100
-for n in nos:
-    delay = (-depart%n)
+for id in ids:
+    delay = (-depart%id)
     if(delay < best):
         best = delay
-        part1 = delay*n
-        
-acc_offset = 0
-prods = nos[0]
-for i in range(1, len(nos)):
-    next_offset = offset[i]
-    next_id = nos[i]
-    '''
-    -(acc_offset + n*prods) = next_offset mod next_id
-    -(n*prods) = next_offset+acc_offset mod next_id
-    n*(-prods) = next_offset+acc_offset mod next_id
-    n = (next_offset+acc_offset)*(-prods)^(next_id-2) mod next_id
-    '''
-    n = (next_offset + acc_offset)*(-prods)**(next_id-2) % next_id
-    acc_offset = acc_offset + n*prods
-    prods *= next_id
-part2=acc_offset    
+        part1 = delay*id
+
+
+t = [0 for _ in range(len(ids))]
+prod = [id for id in ids]
+for i in range(1, len(ids)):
+    prod[i] *= prod[i-1]
+    
+for i in range(len(ids)-1):
+    inv_prod = prod[i]**(ids[i+1]-2) % ids[i+1]
+    f = ( (-t[i]-delays[i+1]) * inv_prod ) % ids[i+1]
+    t[i+1] = t[i] + f*prod[i]
+    
+    
+part2= t[-1]
 
 print(part1)
 print(part2)

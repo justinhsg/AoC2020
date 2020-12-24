@@ -1,2 +1,6 @@
 */input
 */sample
+src/*/input
+src/*/sample
+*.iml
+.idea/*

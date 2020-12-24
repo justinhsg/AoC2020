@@ -88,7 +88,7 @@ def apply_transform(tile, n_rot, transpose):
     else:
         return rot_tile(tile, n_rot)
 
-transpose_swaps = [1,0,3,2]    
+transpose_swaps = [1,0,3,2]
 def get_transform(side, reversed, req_side):
     if(reversed):
         t_side = transpose_swaps[side]

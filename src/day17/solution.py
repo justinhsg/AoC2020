@@ -70,7 +70,7 @@ hypercube = [
                     [
                         ["." for _ in range(in_size+6*2)]
                     for _ in range(in_size+6*2)]
-                for l in range(1+6*2)] if t == 6 else 
+                for l in range(1+6*2)] if t == 6 else
                 [
                     [
                         ["." for _ in range(in_size+6*2)]

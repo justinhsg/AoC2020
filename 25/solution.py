@@ -1,6 +1,7 @@
 import sys
 import os
 import re
+import math
 from collections import deque
 with open(os.path.join(sys.path[0], 'input' if len(sys.argv)==1 else 'sample'), "r") as infile:
     lines = infile.read().split("\n")
@@ -8,21 +9,21 @@ with open(os.path.join(sys.path[0], 'input' if len(sys.argv)==1 else 'sample'), 
 pub_key_1 = int(lines[0])
 pub_key_2 = int(lines[1])
 
-loop_1 = 0
-val_1 = 1
-while(val_1 != pub_key_1):
-    val_1 = val_1 * 7 % 20201227
-    loop_1 += 1
 
-
-loop_2 = 0
-val_2 = 1
-while(val_2 != pub_key_2):
-    val_2 = (val_2*7) % 20201227
-    loop_2+=1
-
-part1 = 1
-for _ in range(loop_1):
-    part1 = (part1*pub_key_2) % 20201227
+def find_discrete_log(base, target, p):
+    lut = dict()
+    m = math.ceil((p-1)**0.5)
+    for j in range(m):
+        lut[pow(base, j, p)] = j
+    base_pow_neg_m = pow(base, (p-1-m), p)
+    assert(base_pow_neg_m * pow(base, m, p) % p == 1)
+    gamma = target
+    for i in range(m):
+        if(gamma in lut):
+            return i*m+lut[gamma]
+        else:
+            gamma = (gamma*base_pow_neg_m)%p
+    
+loop_1 =  find_discrete_log(7, pub_key_1, 20201227)
+part1 = pow(pub_key_2, loop_1, 20201227)
 print(part1)
-#dirs = [0, 0, 0]

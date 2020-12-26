@@ -1,20 +1,18 @@
 package day9;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import utils.AoCSolvable;
 import utils.NoSolutionException;
-import utils.Pair;
 
-public class Solution {
-  static private boolean USE_SAMPLE = false;
-  static private int PREAMBLE = USE_SAMPLE? 5:25;
-  private long[] numbers;
+public class Solution implements AoCSolvable {
+  private static final boolean USE_SAMPLE = false;
+  private static final int PREAMBLE = USE_SAMPLE? 5:25;
+  private final long[] numbers;
   private long partOne = -1L;
 
   Solution(List<String> lines){
@@ -24,7 +22,8 @@ public class Solution {
       numbers[idx++] = Long.parseLong(line);
     }
   }
-  public long partOne() throws NoSolutionException {
+
+  public String partOne() throws NoSolutionException {
     Map<Long, Integer> sums = new HashMap<>();
     for(int i = 0; i<PREAMBLE; i++){
       for (int j = 0; j<PREAMBLE; j++){
@@ -35,7 +34,7 @@ public class Solution {
       long target = numbers[i];
       if(sums.getOrDefault(target, 0) == 0){
         this.partOne = target;
-        return this.partOne;
+        return String.valueOf(this.partOne);
       } else {
         long removeNum = numbers[i-PREAMBLE];
         for (int j = i-PREAMBLE+1; j<i; j++){
@@ -48,10 +47,8 @@ public class Solution {
     throw new NoSolutionException();
   }
 
-  public long partTwo() throws NoSolutionException {
-    if(this.partOne == -1L){
-      partOne();
-    }
+  public String partTwo() throws NoSolutionException {
+    if(this.partOne == -1L) partOne();
     int start = 0;
     int end = 1;
     long cumsum = numbers[start];
@@ -64,7 +61,7 @@ public class Solution {
           min = min<numbers[i]?min:numbers[i];
           max = max>numbers[i]?max:numbers[i];
         }
-        return min + max;
+        return String.valueOf(min + max);
       } else if (cumsum < partOne){
         if(end == numbers.length) break;
         cumsum += numbers[end];
@@ -76,18 +73,14 @@ public class Solution {
     }
     throw new NoSolutionException();
   }
-  
+
   public static void main(String[] args) {
     try{
-      List<String> lines = Files.readAllLines(Paths.get(USE_SAMPLE?"./sample/day9":"./input/day9"));
+      List<String> lines = Files.readAllLines(Paths.get((USE_SAMPLE?"./sample/":"./input/")+ Solution.class.getPackageName()));
       Solution s = new Solution(lines);
       System.out.println(s.partOne());
       System.out.println(s.partTwo());
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (NoSolutionException e) {
+    } catch (IOException | NoSolutionException e) {
       e.printStackTrace();
     }
   }

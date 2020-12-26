@@ -9,7 +9,7 @@ rules = sections[0].split("\n")
 
 max_rule = 0
 for rule in rules:
-    m = re.match("^([0-9]+): ([0-9|\"ab ]+)$", rule)
+      m = re.match("^([0-9]+): ([0-9|\"ab ]+)$", rule)
     max_rule = max(max_rule, int(m.group(1)))
 rule_arr = [None for _ in range(max_rule+1)]
 

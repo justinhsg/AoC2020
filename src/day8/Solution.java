@@ -1,31 +1,24 @@
 package day8;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import utils.AoCSolvable;
 import utils.NoSolutionException;
 import utils.Pair;
 
-public class Solution {
-  static private boolean USE_SAMPLE = false;
+public class Solution implements AoCSolvable {
+  private static final boolean USE_SAMPLE = false;
 
-  List<Pair<String, Integer>> ops;
+  private final List<Pair<String, Integer>> ops;
 
   Solution(List<String> lines){
     ops = new ArrayList<>();
     for (String line:lines){
       String[] splits = line.split(" ");
-      ops.add(new Pair<String, Integer>(splits[0], Integer.parseInt(splits[1])));
+      ops.add(new Pair<>(splits[0], Integer.parseInt(splits[1])));
     }
   }
 
@@ -58,18 +51,18 @@ public class Solution {
     return new Pair(true, acc);
   }
 
-  public int partOne() throws NoSolutionException {
-    return execute().snd;
+  public String partOne() throws NoSolutionException {
+    return String.valueOf(execute().snd);
   }
 
-  public long partTwo() throws NoSolutionException {
+  public String partTwo() throws NoSolutionException {
     for (int i = 0; i<ops.size(); i++){
       if(ops.get(i).fst.equals("nop")){
         Pair<String, Integer> t_op = ops.get(i);
         ops.set(i, new Pair<>("jmp", t_op.snd));
         Pair<Boolean, Integer> res = execute();
         if(res.fst){
-          return res.snd;
+          return String.valueOf(res.snd);
         } else {
           ops.set(i, t_op);
         }
@@ -78,7 +71,7 @@ public class Solution {
         ops.set(i, new Pair<>("nop", t_op.snd));
         Pair<Boolean, Integer> res = execute();
         if(res.fst){
-          return res.snd;
+          return String.valueOf(res.snd);
         } else {
           ops.set(i, t_op);
         }
@@ -86,18 +79,14 @@ public class Solution {
     }
     throw new NoSolutionException();
   }
-  
+
   public static void main(String[] args) {
     try{
-      List<String> lines = Files.readAllLines(Paths.get(USE_SAMPLE?"./sample/day8":"./input/day8"));
+      List<String> lines = Files.readAllLines(Paths.get((USE_SAMPLE?"./sample/":"./input/")+Solution.class.getPackageName()));
       Solution s = new Solution(lines);
       System.out.println(s.partOne());
       System.out.println(s.partTwo());
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (NoSolutionException e) {
+    } catch (IOException | NoSolutionException e) {
       e.printStackTrace();
     }
   }

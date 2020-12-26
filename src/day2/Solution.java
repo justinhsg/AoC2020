@@ -1,30 +1,25 @@
 package day2;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import utils.AoCSolvable;
 import utils.NoSolutionException;
 
-public class Solution {
-  static boolean USE_SAMPLE = false;
-  static Pattern line_pattern = Pattern.compile("^([0-9]+)-([0-9]+) ([a-z]): ([a-z]+)$");
-  private List<String> lines;
-  Set<Integer> numbers;
-  private int starts[], ends[];
-  private char cs[];
-  private String pws[];
+public class Solution implements AoCSolvable {
+  private static final boolean USE_SAMPLE = false;
+  private static final Pattern line_pattern = Pattern.compile("^([0-9]+)-([0-9]+) ([a-z]): ([a-z]+)$");
+  private final List<String> lines;
 
   Solution(List<String> lines){
     this.lines = lines;
   }
 
-  public int partOne() throws NoSolutionException {
+  public String partOne() throws NoSolutionException {
     int solution = 0;
     for (String line:lines){
       Matcher m = line_pattern.matcher(line);
@@ -42,10 +37,10 @@ public class Solution {
         throw new NoSolutionException();
       }
     }
-    return solution;
+    return String.valueOf(solution);
   }
 
-  public int partTwo() throws NoSolutionException {
+  public String partTwo() throws NoSolutionException {
     int solution = 0;
     for (String line:lines){
       Matcher m = line_pattern.matcher(line);
@@ -61,22 +56,16 @@ public class Solution {
         throw new NoSolutionException();
       }
     }
-    return solution;
+    return String.valueOf(solution);
   }
-
-
 
   public static void main(String[] args) {
     try{
-      List<String> lines = Files.readAllLines(Paths.get(USE_SAMPLE?"./sample/day2":"./input/day2"));
+      List<String> lines = Files.readAllLines(Paths.get((USE_SAMPLE?"./sample/":"./input/")+Solution.class.getPackageName()));
       Solution s = new Solution(lines);
       System.out.println(s.partOne());
       System.out.println(s.partTwo());
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (NoSolutionException e) {
+    } catch (IOException | NoSolutionException e) {
       e.printStackTrace();
     }
   }

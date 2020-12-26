@@ -1,16 +1,16 @@
 package day10;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import utils.AoCSolvable;
 import utils.NoSolutionException;
 
-public class Solution {
-  static private boolean USE_SAMPLE = false;
-  private int[] numbers;
+public class Solution implements AoCSolvable {
+  private static final boolean USE_SAMPLE = false;
+  private final int[] numbers;
 
   Solution(List<String> lines){
     numbers = new int[lines.size()];
@@ -20,7 +20,8 @@ public class Solution {
     }
     Arrays.sort(numbers);
   }
-  public long partOne() throws NoSolutionException {
+
+  public String partOne() throws NoSolutionException {
     int nOnes = 1;
     int nThrees = 1;
     for(int i = 0; i<numbers.length-1; i++){
@@ -29,12 +30,11 @@ public class Solution {
       } else if (numbers[i+1]-numbers[i] == 3){
         nThrees += 1;
       }
-
     }
-    return nOnes * nThrees;
+    return String.valueOf(nOnes * nThrees);
   }
 
-  public long partTwo() throws NoSolutionException {
+  public String partTwo() throws NoSolutionException {
     long[] ways = new long[numbers.length];
     for (int i = 0; i<numbers.length; i++){
       int n = numbers[i];
@@ -45,20 +45,16 @@ public class Solution {
         }
       }
     }
-    return ways[ways.length-1];
+    return String.valueOf(ways[ways.length-1]);
   }
-  
+
   public static void main(String[] args) {
     try{
-      List<String> lines = Files.readAllLines(Paths.get(USE_SAMPLE?"./sample/day10":"./input/day10"));
+      List<String> lines = Files.readAllLines(Paths.get((USE_SAMPLE?"./sample/":"./input/")+Solution.class.getPackageName()));
       Solution s = new Solution(lines);
       System.out.println(s.partOne());
       System.out.println(s.partTwo());
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (NoSolutionException e) {
+    } catch (IOException | NoSolutionException e) {
       e.printStackTrace();
     }
   }

@@ -1,24 +1,24 @@
 package day11;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import utils.AoCSolvable;
 import utils.NoSolutionException;
 import utils.Pair;
 
-public class Solution {
-  static private boolean USE_SAMPLE = false;
-  static private int[] dHoriz = {-1, 0, 1, -1, 1, -1, 0, 1};
-  static private int[] dVert = {-1, -1, -1, 0, 0, 1, 1, 1};
-  private char[][] grid;
+public class Solution implements AoCSolvable {
+  private static final boolean USE_SAMPLE = false;
+  private static final int[] dHoriz = {-1, 0, 1, -1, 1, -1, 0, 1};
+  private static final int[] dVert = {-1, -1, -1, 0, 0, 1, 1, 1};
+
+  private final char[][] grid;
   Solution(List<String> lines){
     int idx = 0;
     grid = new char[lines.size()][lines.get(0).length()];
@@ -26,7 +26,8 @@ public class Solution {
       grid[idx++] = line.toCharArray();
     }
   }
-  public long partOne() throws NoSolutionException {
+
+  public String partOne() throws NoSolutionException {
     char[][] state = new char[grid.length][grid[0].length];
     Map<Pair<Integer, Integer>, List<Pair<Integer, Integer>>> adj = new HashMap<>();
 
@@ -77,16 +78,13 @@ public class Solution {
     int solution = 0;
     for(int r = 0; r<grid.length; r++) {
       for (int c = 0; c < grid[0].length; c++) {
-        if (state[r][c] == '#') {
-          solution += 1;
-        }
+        if (state[r][c] == '#') solution += 1;
       }
     }
-    return solution;
-
+    return String.valueOf(solution);
   }
 
-  public long partTwo() throws NoSolutionException {
+  public String partTwo() throws NoSolutionException {
 
     char[][] state = new char[grid.length][grid[0].length];
     Map<Pair<Integer, Integer>, List<Pair<Integer, Integer>>> adj = new HashMap<>();
@@ -125,7 +123,6 @@ public class Solution {
       for (Pair<Integer, Integer> p:toCheck){
         int nOccupied = 0;
         for (Pair<Integer, Integer> adjSeat: adj.get(p)){
-
           if(state[adjSeat.fst][adjSeat.snd]=='#'){
             nOccupied += 1;
           }
@@ -146,26 +143,19 @@ public class Solution {
     int solution = 0;
     for(int r = 0; r<grid.length; r++) {
       for (int c = 0; c < grid[0].length; c++) {
-        if (state[r][c] == '#') {
-          solution += 1;
-        }
+        if (state[r][c] == '#') solution += 1;
       }
     }
-
-    return solution;
+    return String.valueOf(solution);
   }
-  
+
   public static void main(String[] args) {
     try{
-      List<String> lines = Files.readAllLines(Paths.get(USE_SAMPLE?"./sample/day11":"./input/day11"));
+      List<String> lines = Files.readAllLines(Paths.get((USE_SAMPLE?"./sample/":"./input/")+Solution.class.getPackageName()));
       Solution s = new Solution(lines);
       System.out.println(s.partOne());
       System.out.println(s.partTwo());
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (NoSolutionException e) {
+    } catch (IOException | NoSolutionException e) {
       e.printStackTrace();
     }
   }

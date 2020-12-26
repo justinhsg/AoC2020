@@ -1,6 +1,5 @@
 package day7;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -12,14 +11,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import utils.AoCSolvable;
 import utils.NoSolutionException;
 import utils.Pair;
 
-public class Solution {
-  static private boolean USE_SAMPLE = false;
-  static private String targetBag = "shinygold";
-  private Map<String, List<Pair<String, Integer>>> contains;
-  private Map<String, List<String>> contained_by;
+public class Solution implements AoCSolvable {
+  private static final boolean USE_SAMPLE = false;
+  private static final String targetBag = "shinygold";
+  private final Map<String, List<Pair<String, Integer>>> contains;
+  private final Map<String, List<String>> contained_by;
 
   Solution(List<String> lines){
     contained_by = new HashMap<>();
@@ -43,7 +43,7 @@ public class Solution {
 
   }
 
-  public int partOne() throws NoSolutionException {
+  public String partOne() throws NoSolutionException {
     Set<String> visited = new HashSet<>();
     Deque<String> toVisit = new LinkedList<>();
 
@@ -58,10 +58,10 @@ public class Solution {
         }
       }
     }
-    return visited.size()-1;
+    return String.valueOf(visited.size()-1);
   }
 
-  public long partTwo() throws NoSolutionException {
+  public String partTwo() throws NoSolutionException {
     Map<String, Integer> memContains = new HashMap<>();
     Deque<String> toVisit = new LinkedList<>();
 
@@ -87,20 +87,16 @@ public class Solution {
         }
       }
     }
-    return memContains.get(targetBag)-1;
+    return String.valueOf(memContains.get(targetBag)-1);
   }
-  
+
   public static void main(String[] args) {
     try{
-      List<String> lines = Files.readAllLines(Paths.get(USE_SAMPLE?"./sample/day7":"./input/day7"));
+      List<String> lines = Files.readAllLines(Paths.get((USE_SAMPLE?"./sample/":"./input/")+Solution.class.getPackageName()));
       Solution s = new Solution(lines);
       System.out.println(s.partOne());
       System.out.println(s.partTwo());
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (NoSolutionException e) {
+    } catch (IOException | NoSolutionException e) {
       e.printStackTrace();
     }
   }

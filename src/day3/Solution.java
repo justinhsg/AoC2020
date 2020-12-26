@@ -1,15 +1,15 @@
 package day3;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import utils.AoCSolvable;
 import utils.NoSolutionException;
 
-public class Solution {
-  static boolean USE_SAMPLE = false;
-  private char[][] field;
+public class Solution implements AoCSolvable {
+  private static final boolean USE_SAMPLE = false;
+  private final char[][] field;
 
   Solution(List<String> lines){
     this.field = new char[lines.size()][lines.get(0).length()];
@@ -30,29 +30,25 @@ public class Solution {
     return trees;
   }
 
-  public long partOne() throws NoSolutionException {
-    return traverse(3,1);
+  public String partOne() throws NoSolutionException {
+    return String.valueOf(traverse(3,1));
   }
 
-  public long partTwo() throws NoSolutionException {
-    return traverse(1,1)
+  public String partTwo() throws NoSolutionException {
+    return String.valueOf(traverse(1,1)
             *traverse(3,1)
             *traverse(5,1)
             *traverse(7,1)
-            *traverse(1,2);
+            *traverse(1,2));
   }
 
   public static void main(String[] args) {
     try{
-      List<String> lines = Files.readAllLines(Paths.get(USE_SAMPLE?"./sample/day3":"./input/day3"));
+      List<String> lines = Files.readAllLines(Paths.get((USE_SAMPLE?"./sample/":"./input/")+Solution.class.getPackageName()));
       Solution s = new Solution(lines);
       System.out.println(s.partOne());
       System.out.println(s.partTwo());
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (NoSolutionException e) {
+    } catch (IOException | NoSolutionException e) {
       e.printStackTrace();
     }
   }

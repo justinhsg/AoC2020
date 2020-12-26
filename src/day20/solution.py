@@ -179,5 +179,6 @@ for rot in range(4):
     n_monster = find_monster(new_image)
     part2 -= n_monster*len(coords)
 
+
 print(part1)
 print(part2)

@@ -1,6 +1,5 @@
 package day4;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,12 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
+import utils.AoCSolvable;
 import utils.NoSolutionException;
 
-public class Solution {
-  static boolean USE_SAMPLE = false;
-  static Set<String> categories = Set.of("byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid");
-  static Map<String, Pattern> validator= new HashMap<>();
+public class Solution implements AoCSolvable {
+  private static final boolean USE_SAMPLE = false;
+  private static final Set<String> categories = Set.of("byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid");
+  private static final Map<String, Pattern> validator= new HashMap<>();
   static{
     validator.put("byr", Pattern.compile("^19[02-9][0-9]|200[0-2]$"));
     validator.put("iyr", Pattern.compile("^201[0-9]|2020$"));
@@ -25,7 +25,7 @@ public class Solution {
     validator.put("ecl", Pattern.compile("^amb|blu|brn|gry|grn|hzl|oth$"));
     validator.put("pid", Pattern.compile("^[0-9]{9}$"));
   }
-  List<Map<String, String>> passports;
+  private final List<Map<String, String>> passports;
 
   Solution(List<String> lines){
     passports = new ArrayList<>();
@@ -48,7 +48,7 @@ public class Solution {
 
   }
 
-  public int partOne() throws NoSolutionException {
+  public String partOne() throws NoSolutionException {
     int solution = 0;
     for (Map<String, String> passport: passports){
       boolean valid = true;
@@ -58,14 +58,13 @@ public class Solution {
           break;
         }
       }
-      if(valid){
-        solution += 1;
-      }
+      if(valid) solution += 1;
+
     }
-    return solution;
+    return String.valueOf(solution);
   }
 
-  public long partTwo() throws NoSolutionException {
+  public String partTwo() throws NoSolutionException {
     int solution = 0;
     for (Map<String, String> passport: passports){
       boolean valid = true;
@@ -79,24 +78,18 @@ public class Solution {
           break;
         }
       }
-      if(valid){
-        solution += 1;
-      }
+      if(valid) solution += 1;
     }
-    return solution;
+    return String.valueOf(solution);
   }
-  
+
   public static void main(String[] args) {
     try{
-      List<String> lines = Files.readAllLines(Paths.get(USE_SAMPLE?"./sample/day4":"./input/day4"));
+      List<String> lines = Files.readAllLines(Paths.get((USE_SAMPLE?"./sample/":"./input/")+Solution.class.getPackageName()));
       Solution s = new Solution(lines);
       System.out.println(s.partOne());
       System.out.println(s.partTwo());
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (NoSolutionException e) {
+    } catch (IOException | NoSolutionException e) {
       e.printStackTrace();
     }
   }

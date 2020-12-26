@@ -1,6 +1,6 @@
 package utils;
 
-public class Pair<A extends Comparable<? super A>, B extends Comparable<? super B>>  implements Comparable{
+public class Pair<A extends Comparable<? super A>, B extends Comparable<? super B>>  implements Comparable<Pair<A,B>>{
   public A fst;
   public B snd;
   public Pair(A fst, B snd){
@@ -25,8 +25,8 @@ public class Pair<A extends Comparable<? super A>, B extends Comparable<? super 
   }
 
   @Override
-  public int compareTo(Object o) {
-    Pair<A,B> other = (Pair<A,B>) o;
+  public int compareTo(Pair<A,B> o) {
+    Pair<A,B> other = o;
     return this.fst.compareTo(other.fst) != 0? this.fst.compareTo(other.fst) : this.snd.compareTo(other.snd);
   }
 }

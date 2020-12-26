@@ -1,4 +1,7 @@
-package day5;
+package day25;
+
+import static utils.ModuloArithmetic.discreteLog;
+import static utils.ModuloArithmetic.expMod;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,44 +12,21 @@ import utils.NoSolutionException;
 
 public class Solution implements AoCSolvable {
   private static final boolean USE_SAMPLE = false;
+  private static final long MOD = 20201227;
+  private final int pkey1, pkey2;
 
-  private int seats[];
-
-  Solution(List<String> lines){
-    seats = new int[lines.size()];
-    int idx = 0;
-    for (String line:lines){
-      int t_seat = 0;
-      for (int c_i = 0; c_i < line.length(); c_i++){
-        char c = line.charAt(c_i);
-        t_seat <<= 1;
-        if(c == 'B' || c == 'R'){
-          t_seat += 1;
-        }
-      }
-      seats[idx++] = t_seat;
-    }
+  Solution(List<String> lines) throws NoSolutionException {
+    pkey1 = Integer.parseInt(lines.get(0));
+    pkey2 = Integer.parseInt(lines.get(1));
   }
 
   public String partOne() throws NoSolutionException {
-    int solution = 0;
-    for(int seat:seats){
-      solution = seat>solution?seat:solution;
-    }
-    return String.valueOf(solution);
+    long loopNumber = discreteLog(7, pkey1, MOD);
+    return String.valueOf(expMod(pkey2, loopNumber, MOD));
   }
 
   public String partTwo() throws NoSolutionException {
-    boolean occupied[] = new boolean[1<<10];
-
-    for(int seat:seats){
-      occupied[seat] = true;
-    }
-    int seat = 0;
-    while(!occupied[seat]) seat++;
-    while(occupied[seat]) seat++;
-
-    return String.valueOf(seat);
+    return "0";
   }
 
   public static void main(String[] args) {

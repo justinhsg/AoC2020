@@ -1,18 +1,19 @@
 package day12;
 
-
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import utils.AoCSolvable;
 import utils.NoSolutionException;
 import utils.Pair;
 
-public class Solution {
-  static private boolean USE_SAMPLE = false;
-  private char[] op;
-  private int[] vals;
+public class Solution implements AoCSolvable {
+  private static final boolean USE_SAMPLE = false;
+
+  private final char[] op;
+  private final int[] vals;
+
   Solution(List<String> lines){
     op = new char[lines.size()];
     vals = new int[lines.size()];
@@ -23,19 +24,19 @@ public class Solution {
     }
   }
 
-  private void rotCW(Pair<Integer, Integer> p){
+  private static void rotCW(Pair<Integer, Integer> p){
     int t = p.fst;
     p.fst = p.snd;
     p.snd = -t;
   }
 
-  private void rotCCW(Pair<Integer, Integer> p){
+  private static void rotCCW(Pair<Integer, Integer> p){
     int t = p.fst;
     p.fst = -p.snd;
     p.snd = t;
   }
 
-  public long partOne() throws NoSolutionException {
+  public String partOne() throws NoSolutionException {
     int[] dHorz = {0, 1, 0, -1};
     int[] dVert = {1, 0, -1, 0};
     int face = 1;
@@ -68,13 +69,12 @@ public class Solution {
         default:
           throw new NoSolutionException();
       }
-      //System.out.println(op[i]+": "+vals[i]+", "+pos);
     }
 
-    return Math.abs(pos.fst)+Math.abs(pos.snd);
+    return String.valueOf(Math.abs(pos.fst)+Math.abs(pos.snd));
   }
 
-  public long partTwo() throws NoSolutionException {
+  public String partTwo() throws NoSolutionException {
     Pair<Integer, Integer> way = new Pair(10,1);
     Pair<Integer, Integer> pos = new Pair(0,0);
     for(int i = 0; i < op.length; i++){
@@ -92,14 +92,10 @@ public class Solution {
           way.fst -= vals[i];
           break;
         case 'R':
-          for(int r = 0; r<vals[i]/90%4; r++){
-            rotCW(way);
-          }
+          for(int r = 0; r<vals[i]/90%4; r++) rotCW(way);
           break;
         case 'L':
-          for(int r = 0; r<vals[i]/90%4; r++){
-            rotCCW(way);
-          }
+          for(int r = 0; r<vals[i]/90%4; r++) rotCCW(way);
           break;
         case 'F':
           pos.snd += vals[i]*way.snd;
@@ -109,21 +105,16 @@ public class Solution {
           throw new NoSolutionException();
       }
     }
-
-    return Math.abs(pos.fst)+Math.abs(pos.snd);
+    return String.valueOf(Math.abs(pos.fst)+Math.abs(pos.snd));
   }
-  
+
   public static void main(String[] args) {
     try{
-      List<String> lines = Files.readAllLines(Paths.get(USE_SAMPLE?"./sample/day12":"./input/day12"));
+      List<String> lines = Files.readAllLines(Paths.get((USE_SAMPLE?"./sample/":"./input/")+Solution.class.getPackageName()));
       Solution s = new Solution(lines);
       System.out.println(s.partOne());
       System.out.println(s.partTwo());
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (NoSolutionException e) {
+    } catch (IOException | NoSolutionException e) {
       e.printStackTrace();
     }
   }

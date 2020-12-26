@@ -1,6 +1,5 @@
 package day6;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -8,13 +7,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import utils.AoCSolvable;
 import utils.NoSolutionException;
 
-public class Solution {
-  static boolean USE_SAMPLE = false;
+public class Solution implements AoCSolvable {
+  private static final boolean USE_SAMPLE = false;
 
+  private final List<List<String>> groups;
 
-  List<List<String>> groups;
   Solution(List<String> lines){
     groups = new ArrayList<>();
     List<String> group = new ArrayList<>();
@@ -29,7 +29,7 @@ public class Solution {
     if(group.size()!=0) groups.add(group);
   }
 
-  public int partOne() throws NoSolutionException {
+  public String partOne() throws NoSolutionException {
     int solution = 0;
     for(List<String> group:groups){
       Set<Character> yes_responses = new HashSet<>();
@@ -41,10 +41,10 @@ public class Solution {
       }
       solution += yes_responses.size();
     }
-    return solution;
+    return String.valueOf(solution);
   }
 
-  public long partTwo() throws NoSolutionException {
+  public String partTwo() throws NoSolutionException {
     int solution = 0;
     for(List<String> group:groups){
       Set<Character> yes_responses = new HashSet<>();
@@ -60,20 +60,16 @@ public class Solution {
       }
       solution += yes_responses.size();
     }
-    return solution;
+    return String.valueOf(solution);
   }
-  
+
   public static void main(String[] args) {
     try{
-      List<String> lines = Files.readAllLines(Paths.get(USE_SAMPLE?"./sample/day6":"./input/day6"));
+      List<String> lines = Files.readAllLines(Paths.get((USE_SAMPLE?"./sample/":"./input/")+Solution.class.getPackageName()));
       Solution s = new Solution(lines);
       System.out.println(s.partOne());
       System.out.println(s.partTwo());
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (NoSolutionException e) {
+    } catch (IOException | NoSolutionException e) {
       e.printStackTrace();
     }
   }

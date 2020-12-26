@@ -1,7 +1,12 @@
 import sys
 import os
 import re
-with open(os.path.join(sys.path[0], 'input' if len(sys.argv)==1 else 'sample'), "r") as infile:
+day_number = sys.path[0].split('\\')[-1]
+if len(sys.argv)==1:
+    path_to_source = os.path.join("\\".join(sys.path[0].split("\\")[:-2]), f"input\\{day_number}")
+else:
+    path_to_source = os.path.join("\\".join(sys.path[0].split("\\")[:-2]), f"sample\\{day_number}")
+with open(path_to_source, "r") as infile:
     lines = infile.read().split("\n")
 
 part1, part2 = None, None

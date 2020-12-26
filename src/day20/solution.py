@@ -2,7 +2,12 @@ import sys
 import os
 import re
 from collections import deque
-with open(os.path.join(sys.path[0], 'input' if len(sys.argv)==1 else 'sample'), "r") as infile:
+day_number = sys.path[0].split('\\')[-1]
+if len(sys.argv)==1:
+    path_to_source = os.path.join("\\".join(sys.path[0].split("\\")[:-2]), f"input\\{day_number}")
+else:
+    path_to_source = os.path.join("\\".join(sys.path[0].split("\\")[:-2]), f"sample\\{day_number}")
+with open(path_to_source, "r") as infile:
     tiles = infile.read().split("\n\n")
 
 #Map tile_id to full tile
@@ -145,9 +150,7 @@ for row in range(image_tile_width):
             for img_c in range(col*(tile_size-2), (col+1)*(tile_size-2)):
                 full_image[img_r][img_c] = next_tile[img_r%(tile_size-2)+1][img_c%(tile_size-2)+1]
     
-with open(os.path.join(sys.path[0], 'monster'), "r") as infile:
-    monster = infile.read().split("\n")
-
+monster = ["                  # ","#    ##    ##    ###"," #  #  #  #  #  #   "]
 coords = []
 for r_i, r in enumerate(monster):
     for c_i, c in enumerate(r):

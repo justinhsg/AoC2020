@@ -4,7 +4,12 @@ import os
 import re
 from collections import deque
 
-with open(os.path.join(sys.path[0], 'input' if len(sys.argv)==1 else 'sample'), "r") as infile:
+day_number = sys.path[0].split('\\')[-1]
+if len(sys.argv)==1:
+    path_to_source = os.path.join("\\".join(sys.path[0].split("\\")[:-2]), f"input\\{day_number}")
+else:
+    path_to_source = os.path.join("\\".join(sys.path[0].split("\\")[:-2]), f"sample\\{day_number}")
+with open(path_to_source, "r") as infile:
     directions = infile.read().split("\n")
     
 

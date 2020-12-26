@@ -1,9 +1,5 @@
-*/input
-*/sample
 sample/*
 input/*
-src/*/input
-src/*/sample
 out/*
 *.iml
 .idea/*
